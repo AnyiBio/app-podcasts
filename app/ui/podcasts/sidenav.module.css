@@ -1,0 +1,37 @@
+/* SideNav.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem 0.75rem;
+}
+
+.content {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.contentMd {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.author {
+  font-style: italic;
+}
+
+.description {
+  margin-top: 0.5rem;
+}
+
+.descriptionText {
+  color: #333;
+  font-size: 0.875rem;
+}
