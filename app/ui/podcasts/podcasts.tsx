@@ -1,3 +1,5 @@
+'use client';
+
 import PodcastCard from './podcast-card';
 import styles from './podcast.module.css';
 import Search from '../search';
