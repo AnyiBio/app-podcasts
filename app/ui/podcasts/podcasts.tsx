@@ -1,18 +1,39 @@
 'use client';
 
+import { use } from 'react';
 import PodcastCard from './podcast-card';
 import styles from './podcast.module.css';
 import Search from '../search';
 import { getTopPodcasts } from '@/src/application/get.top-podcasts';
 
-export default async function Podcasts() {
-  const podcasts = await getTopPodcasts();
+interface Podcast {
+  id: string;
+  podcastImage: string;
+  podcastName: string;
+  author: string;
+}
+
+interface SearchParamsProps {
+  searchParams?: {
+    query?: string;
+  };
+}
+
+export default function Podcasts({ searchParams }: Readonly<SearchParamsProps>) {
+  const query = searchParams?.query ?? '';
+  const podcasts: Podcast[] = use(getTopPodcasts());
+
+  const filteredPodcasts = podcasts.filter(
+    (podcast) =>
+      podcast.podcastName.toLowerCase().includes(query.toLowerCase()) ||
+      podcast.author.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <>
       <Search placeholder="Filter podcasts..." />
       <div className={styles.grid}>
-        {podcasts.map((podcast) => (
+        {filteredPodcasts.map((podcast) => (
           <PodcastCard
             key={podcast.id}
             id={podcast.id}

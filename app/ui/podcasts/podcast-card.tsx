@@ -2,12 +2,12 @@ import styles from './podcast.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type PodcastProps = {
+interface PodcastProps {
   id: string;
   image_url: string;
   name: string;
   author: string;
-};
+}
 
 export default function PodcastCard({ id, image_url, name, author }: PodcastProps) {
   return (

@@ -5,7 +5,7 @@ import { mapPodcastsFromApiToVm } from '../infrastructure/podcasts.mapper';
 const CACHE_KEY = 'topPodcasts';
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-export async function getTopPodcasts() {
+export async function getPodcastDetails() {
   const cachedData = await LocalCache.get(CACHE_KEY, ONE_DAY_IN_MS);
 
   if (cachedData) {

@@ -1,4 +1,4 @@
-export interface ApiPodcasts {
+export interface PodcastsApiResponse {
   feed: {
     author: {
       name: {
