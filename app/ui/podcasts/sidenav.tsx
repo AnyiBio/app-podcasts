@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import styles from './sidenav.module.css';
-import { usePodcastsContext } from '@/app/hooks/usePodcast';
+import { usePodcastDetailContext } from '@/app/hooks/usePodcastDetail';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { fetchAndParseXml } from '@/app/service/parseXml';
@@ -12,7 +12,7 @@ interface SideNavProps {
 }
 
 export default function SideNav({ id }: Readonly<SideNavProps>) {
-  const { podcasts, fetchPodcasts } = usePodcastsContext();
+  const { podcasts, fetchPodcasts } = usePodcastDetailContext();
   const [descripton, setDescription] = useState('');
   useEffect(() => {
     if (id) {

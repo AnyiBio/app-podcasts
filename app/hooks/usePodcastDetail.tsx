@@ -5,19 +5,19 @@ import { LocalCache } from '@/src/infrastructure/cache/local-cache';
 import { PodcastDetailResult } from '@/src/infrastructure/podcast-detail.api.entity';
 import { ReactNode, useState, useContext, createContext } from 'react';
 
-interface PodcastsContextType {
+interface PodcastDetailContextType {
   podcasts: PodcastDetailResult[] | null;
   fetchPodcasts: (podcastId: string) => Promise<void>;
 }
 
-const defaultContextValue: PodcastsContextType = {
+const defaultContextValue: PodcastDetailContextType = {
   podcasts: null,
   fetchPodcasts: async () => {}
 };
 
-const PodcastsContext = createContext<PodcastsContextType>(defaultContextValue);
+const PodcastDetailContext = createContext<PodcastDetailContextType>(defaultContextValue);
 
-export const PodcastsProvider = ({ children }: { children: ReactNode }) => {
+export const PodcastDetailProvider = ({ children }: { children: ReactNode }) => {
   const [podcasts, setPodcasts] = useState<PodcastDetailResult[] | null>(null);
   const fetchPodcasts = async (podcastId: string) => {
     const cacheKey = `podcast_id_${podcastId}`;
@@ -33,14 +33,14 @@ export const PodcastsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <PodcastsContext.Provider value={{ podcasts, fetchPodcasts }}>
+    <PodcastDetailContext.Provider value={{ podcasts, fetchPodcasts }}>
       {children}
-    </PodcastsContext.Provider>
+    </PodcastDetailContext.Provider>
   );
 };
 
-export const usePodcastsContext = () => {
-  const context = useContext(PodcastsContext);
+export const usePodcastDetailContext = () => {
+  const context = useContext(PodcastDetailContext);
   if (context === undefined) {
     throw new Error('usePodcastsContext must be used within a PodcastsProvider');
   }

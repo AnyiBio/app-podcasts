@@ -1,7 +1,7 @@
 'use client';
 
 import formatDate from '@/app/helpers/format-date';
-import { usePodcastsContext } from '@/app/hooks/usePodcast';
+import { usePodcastDetailContext } from '@/app/hooks/usePodcastDetail';
 import { fetchAndParseXml } from '@/app/service/parseXml';
 import { lusitana } from '@/app/ui/fonts';
 import Link from 'next/link';
@@ -18,7 +18,7 @@ interface EpisodesTableProps {
 }
 
 export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
-  const { podcasts, fetchPodcasts } = usePodcastsContext();
+  const { podcasts, fetchPodcasts } = usePodcastDetailContext();
   const [episodes, setEpisodes] = useState([
     {
       id: '',
