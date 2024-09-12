@@ -1,10 +1,11 @@
+import { Suspense } from 'react';
 import EpisodesTable from '../../ui/episodes/table';
+import { CardSkeleton } from '@/app/ui/skeletons';
 
-export default function PodcastDetail() {
+export default function PodcastDetailPage({ params }: { params: { podcastId: string } }) {
   return (
-    <>
-      <p>PodcastDetail Page</p>
-      <EpisodesTable />
-    </>
+    <Suspense fallback={<CardSkeleton />}>
+      <EpisodesTable id={params.podcastId} />
+    </Suspense>
   );
 }

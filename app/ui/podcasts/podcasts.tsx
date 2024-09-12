@@ -1,6 +1,6 @@
 'use client';
 
-import { use } from 'react';
+import { useEffect, useState } from 'react';
 import PodcastCard from './podcast-card';
 import styles from './podcast.module.css';
 import Search from '../search';
@@ -21,7 +21,13 @@ interface SearchParamsProps {
 
 export default function Podcasts({ searchParams }: Readonly<SearchParamsProps>) {
   const query = searchParams?.query ?? '';
-  const podcasts: Podcast[] = use(getTopPodcasts());
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
+
+  useEffect(() => {
+    getTopPodcasts().then((result) => {
+      setPodcasts(result);
+    });
+  }, []);
 
   const filteredPodcasts = podcasts.filter(
     (podcast) =>

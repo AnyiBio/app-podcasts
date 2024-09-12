@@ -1,6 +1,7 @@
-import { Suspense } from 'react';
-import Podcasts from './ui/podcasts/podcasts';
+import React, { Suspense } from 'react';
 import { CardSkeleton } from './ui/skeletons';
+
+const Podcasts = React.lazy(() => import('./ui/podcasts/podcasts'));
 
 export default function Page({
   searchParams

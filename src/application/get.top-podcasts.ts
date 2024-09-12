@@ -1,3 +1,4 @@
+import { Podcast } from '../domain/podcast';
 import { LocalCache } from '../infrastructure/cache/local-cache';
 import { PodcastsApiRepository } from '../infrastructure/podcasts.api.repository';
 import { mapPodcastsFromApiToVm } from '../infrastructure/podcasts.mapper';
@@ -6,7 +7,7 @@ const CACHE_KEY = 'topPodcasts';
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 export async function getTopPodcasts() {
-  const cachedData = await LocalCache.get(CACHE_KEY, ONE_DAY_IN_MS);
+  const cachedData = await LocalCache.get<Podcast>(CACHE_KEY, ONE_DAY_IN_MS);
 
   if (cachedData) {
     return cachedData;
@@ -16,7 +17,7 @@ export async function getTopPodcasts() {
   const data = await repository.getTopPodcasts();
   const podcasts = mapPodcastsFromApiToVm(data.feed.entry);
 
-  await LocalCache.set(CACHE_KEY, podcasts);
+  await LocalCache.set<Podcast>(CACHE_KEY, podcasts);
 
   return podcasts;
 }
