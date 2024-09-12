@@ -1,9 +1,9 @@
 'use client';
 
+import formatDate from '@/app/helpers/format-date';
 import { usePodcastsContext } from '@/app/hooks/usePodcast';
 import { fetchAndParseXml } from '@/app/service/parseXml';
 import { lusitana } from '@/app/ui/fonts';
-import Search from '@/app/ui/search';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -15,19 +15,6 @@ export type FormattedEpisodesTable = {
 };
 interface EpisodesTableProps {
   id: string;
-}
-
-function formatDate(inputDateString: string): string {
-  // Parse the input date string into a Date object
-  const date = new Date(inputDateString);
-
-  // Extract the day, month, and year
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1; // Months are zero-based in JavaScript
-  const year = date.getUTCFullYear();
-
-  // Format the date as 'dd/mm/yyyy'
-  return `${day}/${month}/${year}`;
 }
 
 export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
