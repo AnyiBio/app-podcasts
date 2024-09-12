@@ -14,13 +14,20 @@ export async function fetchAndParseXml(xmlUrl: string) {
       id: item.guid[0]._,
       title: item.title[0],
       date: item.pubDate[0],
-      duration: item['itunes:duration'][0],
-      link: item.link[0]
+      duration: item['itunes:duration'][0]
+    }));
+
+    const episodesDetail = result.rss.channel[0].item.map((item: any) => ({
+      id: item.guid[0]._,
+      title: item.title[0],
+      description: item.description[0],
+      audio: item.enclosure[0]
     }));
 
     return {
       description,
-      episodes
+      episodes,
+      episodesDetail
     };
   } catch (error) {
     console.error('Error fetching or parsing XML:', error);

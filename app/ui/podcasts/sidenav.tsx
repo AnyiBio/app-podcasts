@@ -12,27 +12,27 @@ interface SideNavProps {
 }
 
 export default function SideNav({ id }: Readonly<SideNavProps>) {
-  const { podcasts, fetchPodcasts } = usePodcastDetailContext();
+  const { podcastDetail, fetchPodcastDetail } = usePodcastDetailContext();
   const [descripton, setDescription] = useState('');
   useEffect(() => {
     if (id) {
-      fetchPodcasts(id);
+      fetchPodcastDetail(id);
     }
   }, [id]);
 
   useEffect(() => {
-    if (!!podcasts) {
-      const xmlUrl = podcasts?.[0].feedUrl;
+    if (!!podcastDetail) {
+      const xmlUrl = podcastDetail?.[0].feedUrl;
       fetchAndParseXml(xmlUrl).then((res) => {
         setDescription(res?.description);
       });
     }
-  }, [podcasts]);
+  }, [podcastDetail]);
   return (
     <div className={styles.container}>
       <Link className={styles.link} href={`/podcast/${id}`}>
         <Image
-          src={podcasts?.[0].artworkUrl600 || ''}
+          src={podcastDetail?.[0].artworkUrl600 || ''}
           width={1000}
           height={760}
           className="hidden md:block"
@@ -40,8 +40,8 @@ export default function SideNav({ id }: Readonly<SideNavProps>) {
         />
       </Link>
       <div className={`${styles.content} md:${styles.contentMd}`}>
-        <p className={styles.title}>{`${podcasts?.[0].trackName}`}</p>
-        <span className={styles.author}>{`by ${podcasts?.[0].artistName} `}</span>
+        <p className={styles.title}>{`${podcastDetail?.[0].trackName}`}</p>
+        <span className={styles.author}>{`by ${podcastDetail?.[0].artistName} `}</span>
         <p className={styles.description}>Description</p>
         <p className={styles.descriptionText}>{descripton}</p>
       </div>

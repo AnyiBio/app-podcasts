@@ -18,7 +18,7 @@ interface EpisodesTableProps {
 }
 
 export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
-  const { podcasts, fetchPodcasts } = usePodcastDetailContext();
+  const { podcastDetail, fetchPodcastDetail } = usePodcastDetailContext();
   const [episodes, setEpisodes] = useState([
     {
       id: '',
@@ -31,18 +31,18 @@ export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
 
   useEffect(() => {
     if (id) {
-      fetchPodcasts(id);
+      fetchPodcastDetail(id);
     }
   }, [id]);
 
   useEffect(() => {
-    if (!!podcasts) {
-      const xmlUrl = podcasts?.[0].feedUrl;
+    if (!!podcastDetail) {
+      const xmlUrl = podcastDetail?.[0].feedUrl;
       fetchAndParseXml(xmlUrl).then((res) => {
         setEpisodes(res?.episodes);
       });
     }
-  }, [podcasts]);
+  }, [podcastDetail]);
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>Episodes</h1>

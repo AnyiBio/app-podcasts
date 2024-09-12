@@ -6,34 +6,34 @@ import { PodcastDetailResult } from '@/src/infrastructure/podcast-detail.api.ent
 import { ReactNode, useState, useContext, createContext } from 'react';
 
 interface PodcastDetailContextType {
-  podcasts: PodcastDetailResult[] | null;
-  fetchPodcasts: (podcastId: string) => Promise<void>;
+  podcastDetail: PodcastDetailResult[] | null;
+  fetchPodcastDetail: (podcastId: string) => Promise<void>;
 }
 
 const defaultContextValue: PodcastDetailContextType = {
-  podcasts: null,
-  fetchPodcasts: async () => {}
+  podcastDetail: null,
+  fetchPodcastDetail: async () => {}
 };
 
 const PodcastDetailContext = createContext<PodcastDetailContextType>(defaultContextValue);
 
 export const PodcastDetailProvider = ({ children }: { children: ReactNode }) => {
-  const [podcasts, setPodcasts] = useState<PodcastDetailResult[] | null>(null);
-  const fetchPodcasts = async (podcastId: string) => {
+  const [podcastDetail, setPodcastDetail] = useState<PodcastDetailResult[] | null>(null);
+  const fetchPodcastDetail = async (podcastId: string) => {
     const cacheKey = `podcast_id_${podcastId}`;
 
     const cachedData = await LocalCache.get<PodcastDetailResult>(cacheKey, 24 * 60 * 60 * 1000);
     if (cachedData) {
-      setPodcasts(cachedData);
+      setPodcastDetail(cachedData);
     } else {
       const data = await getPodcastDetails(podcastId);
-      setPodcasts(data);
+      setPodcastDetail(data);
       await LocalCache.set<PodcastDetailResult>(cacheKey, data);
     }
   };
 
   return (
-    <PodcastDetailContext.Provider value={{ podcasts, fetchPodcasts }}>
+    <PodcastDetailContext.Provider value={{ podcastDetail, fetchPodcastDetail }}>
       {children}
     </PodcastDetailContext.Provider>
   );
