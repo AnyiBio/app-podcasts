@@ -1,16 +1,38 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './sidenav.module.css';
 import Image from 'next/image';
 import { fetchAndParseXml } from '@/app/service/parseXml';
+import { getPodcastDetails } from '@/src/application/get.podcast-detail';
 
 interface SideNavProps {
   id: string;
-  podcastDetail: any[];
 }
 
-export default async function SideNav({ id, podcastDetail }: Readonly<SideNavProps>) {
-  const xmlUrl = await podcastDetail?.[0].feedUrl;
-  const description: string = await fetchAndParseXml(xmlUrl).then((res) => res?.description);
+export default function SideNav({ id }: Readonly<SideNavProps>) {
+  const [podcastDetail, setPodcastDetails] = useState<any[]>();
+  const [description, setDescription] = useState('');
+  const containsHTML = /<\/?[a-z][\s\S]*>/i.test(description);
+
+  useEffect(() => {
+    if (!!id) {
+      getPodcastDetails(id).then((res) => {
+        setPodcastDetails(res);
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (!!podcastDetail) {
+      const xmlUrl = podcastDetail?.[0].feedUrl;
+      fetchAndParseXml(xmlUrl).then((res) => {
+        setDescription(res?.description);
+      });
+    }
+  }, [podcastDetail]);
+
   return (
     <div className={styles.container}>
       <Link className={styles.link} href={`/podcast/${id}`}>
@@ -26,7 +48,11 @@ export default async function SideNav({ id, podcastDetail }: Readonly<SideNavPro
         <p className={styles.title}>{`${podcastDetail?.[0].trackName || ''}`}</p>
         <span className={styles.author}>{`by ${podcastDetail?.[0].artistName || ''}`}</span>
         <p className={styles.description}>Description</p>
-        <p className={styles.descriptionText}>{description}</p>
+        {containsHTML ? (
+          <div dangerouslySetInnerHTML={{ __html: description }} />
+        ) : (
+          <p className={styles.descriptionText}>{description}</p>
+        )}
       </div>
     </div>
   );

@@ -11,13 +11,12 @@ export default async function Layout({
     podcastId: string;
   };
 }) {
-  const podcastDetail = await getPodcastDetails(params.podcastId);
   const id = await params.podcastId;
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden my-10">
       <div className="w-full flex-none md:w-64">
         <Suspense fallback={<div>loading...</div>}>
-          <SideNav id={id} podcastDetail={podcastDetail} />
+          <SideNav id={id} />
         </Suspense>
       </div>
       <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>

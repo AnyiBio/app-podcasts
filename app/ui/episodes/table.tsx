@@ -1,7 +1,11 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import formatDate from '@/app/helpers/format-date';
 import { fetchAndParseXml } from '@/app/service/parseXml';
 import { lusitana } from '@/app/ui/fonts';
 import Link from 'next/link';
+import { getPodcastDetails } from '@/src/application/get.podcast-detail';
 
 export type EpisodesProps = {
   id: string;
@@ -14,9 +18,34 @@ interface EpisodesTableProps {
   podcastDetail: any[];
 }
 
-export default async function EpisodesTable({ id, podcastDetail }: Readonly<EpisodesTableProps>) {
-  const xmlUrl = await podcastDetail?.[0].feedUrl;
-  const episodes: EpisodesProps[] = await fetchAndParseXml(xmlUrl).then((res) => res?.episodes);
+export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
+  const [podcastDetail, setPodcastDetails] = useState<any[]>();
+  const [episodes, setEpisodes] = useState([
+    {
+      id: '',
+      title: '',
+      date: '',
+      duration: '',
+      link: ''
+    }
+  ]);
+
+  useEffect(() => {
+    if (!!id) {
+      getPodcastDetails(id).then((res) => {
+        setPodcastDetails(res);
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (!!podcastDetail) {
+      const xmlUrl = podcastDetail?.[0].feedUrl;
+      fetchAndParseXml(xmlUrl).then((res) => {
+        setEpisodes(res?.episodes);
+      });
+    }
+  }, [podcastDetail]);
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>Episodes</h1>
