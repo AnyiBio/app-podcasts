@@ -15,17 +15,10 @@ export default function PodcastCard({ id, image_url, name, author }: PodcastProp
       <Link href={`/podcast/${id}`}>
         <Image
           src={image_url || ''}
-          alt="avatar podcast image desktop"
+          alt="avatar podcast image"
           width={100}
           height={100}
           className={styles.image}
-        />
-        <Image
-          src={image_url || ''}
-          width={560}
-          height={620}
-          className="block md:hidden"
-          alt="avatar podcast image desktop showing mobile version"
         />
       </Link>
       <Link href={`/podcast/${id}`}>
