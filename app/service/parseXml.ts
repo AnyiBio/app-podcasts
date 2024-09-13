@@ -1,5 +1,5 @@
 import { parseStringPromise } from 'xml2js';
-import extractGuid from '../helpers/extract-guid';
+import extractField, { extractGuid } from '../helpers/extract-guid';
 
 export async function fetchAndParseXml(xmlUrl: string) {
   try {
@@ -12,17 +12,17 @@ export async function fetchAndParseXml(xmlUrl: string) {
     const description = result.rss.channel[0].description[0];
 
     const episodes = result.rss.channel[0].item.map((item: any) => ({
-      id: item.guid?.[0]?._ || item.guid?.[0] || 'N/A',
+      id: extractGuid(item),
       title: item.title[0],
       date: item.pubDate[0],
-      duration: item['itunes:duration'][0]
+      duration: extractField<string>(item, 'itunes:duration')
     }));
 
     const episodesDetail = result.rss.channel[0].item.map((item: any) => ({
       id: extractGuid(item),
       title: item.title[0],
       description: item.description[0],
-      audio: item.enclosure[0]
+      audio: extractField<any>(item, 'enclosure')
     }));
 
     return {

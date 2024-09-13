@@ -104,7 +104,7 @@ export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
                     <tr key={episode.id} className="group">
                       <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
-                          <Link href={`/podcast/${id}/episode/${verifyUrl(episode.id)}`}>
+                          <Link href={`/podcast/${id}/episode/${episode.id}`}>
                             <p>{episode.title}</p>
                           </Link>
                         </div>

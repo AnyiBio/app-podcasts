@@ -12,20 +12,41 @@
  * @param item - The object containing the GUID, which may have different formats.
  * @returns The extracted GUID as a string or 'N/A' if no valid GUID is found.
  */
-export default function extractGuid(item: any): string {
-  if (item.guid?.[0]?._) {
-    return item.guid[0]._;
+interface GuidItem {
+  guid?: { _?: string }[] | string[];
+}
+
+export function extractGuid(item: GuidItem): string {
+  // Check if the GUID has an internal property `_`
+  if (Array.isArray(item.guid) && typeof item.guid[0] === 'object' && item.guid[0]?._) {
+    return item.guid[0]._ as string;
   }
 
-  if (item.guid?.[0]) {
-    const guidValue = item.guid[0];
+  // Check if the GUID is a string and handle CDATA format
+  const guidValue = Array.isArray(item.guid) ? item.guid[0] : item.guid;
 
-    if (guidValue.includes('gid:')) {
-      console.log('guidddd');
-      return guidValue.split('/').pop();
+  if (typeof guidValue === 'string') {
+    // Handle CDATA by stripping <![CDATA[ and ]]> tags if present
+    const cleanedGuidValue = guidValue.replace(/<!\[CDATA\[|\]\]>/g, '').trim();
+
+    if (cleanedGuidValue.includes('gid:')) {
+      // Extract the part after 'gid:' from the cleaned GUID string
+      return cleanedGuidValue.split('/').pop() ?? '';
     }
 
-    return guidValue;
+    return cleanedGuidValue;
+  }
+
+  return 'N/A';
+}
+
+interface Item {
+  [key: string]: any;
+}
+
+export default function extractField<T>(item: Item, field: string): T | 'N/A' {
+  if (Array.isArray(item[field]) && item[field].length > 0) {
+    return item[field][0];
   }
 
   return 'N/A';

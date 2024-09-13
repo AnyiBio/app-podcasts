@@ -41,7 +41,14 @@ export default function SideNav({ id }: Readonly<SideNavProps>) {
           width={1000}
           height={760}
           className="hidden md:block"
-          alt="podcast image"
+          alt="podcast image desktop"
+        />
+        <Image
+          src={podcastDetail?.[0].artworkUrl600 || ''}
+          width={560}
+          height={620}
+          className="block md:hidden"
+          alt="podcast image desktop showing mobile version"
         />
       </Link>
       <div className={`${styles.content} md:${styles.contentMd} || ''`}>
