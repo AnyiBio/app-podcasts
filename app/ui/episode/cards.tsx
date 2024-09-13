@@ -7,6 +7,7 @@ interface EpisodeDetailProps {
 }
 
 export async function Card({ episodeId, podcastDetail }: Readonly<EpisodeDetailProps>) {
+  const containsHTML = (description: string) => /<\/?[a-z][\s\S]*>/i.test(description);
   const xmlUrl = await podcastDetail?.[0].feedUrl;
   const episodeDetail = await fetchAndParseXml(xmlUrl).then((res) => {
     if (res?.episodes) {
@@ -17,16 +18,26 @@ export async function Card({ episodeId, podcastDetail }: Readonly<EpisodeDetailP
   return (
     <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
       <div className="flex p-4">
-        <h3 className="ml-2 text-sm font-medium">{episodeDetail.title}</h3>
+        <h3 className="ml-2 text-sm font-medium">{episodeDetail?.title}</h3>
       </div>
-      <p
-        className={`${lusitana.className}
-          bg-white px-4 py-8 text-2xl`}
-        dangerouslySetInnerHTML={{ __html: episodeDetail.description }}
-      />
-      {episodeDetail.audio.$.url ? (
+
+      {containsHTML(episodeDetail?.description) ? (
+        <p
+          className={`${lusitana.className}
+            bg-white px-4 py-8 text-2xl`}
+          dangerouslySetInnerHTML={{ __html: episodeDetail?.description }}
+        />
+      ) : (
+        <p
+          className={`${lusitana.className}
+         bg-white px-4 py-8 text-2xl`}
+        >
+          {episodeDetail?.description}
+        </p>
+      )}
+      {episodeDetail?.audio?.$?.url ? (
         <audio controls>
-          <source src={episodeDetail.audio.$.url} type={episodeDetail.audio.$.type} />
+          <source src={episodeDetail.audio.$.url} type={episodeDetail?.audio?.$?.type} />
           Your browser does not support the audio element.
         </audio>
       ) : (

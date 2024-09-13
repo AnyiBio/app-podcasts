@@ -46,6 +46,13 @@ export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
       });
     }
   }, [podcastDetail]);
+
+  const verifyUrl = (url: string) => {
+    if (url.includes('gid:')) {
+      return url.split('/').pop();
+    }
+    return url;
+  };
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>Episodes</h1>
@@ -97,7 +104,7 @@ export default function EpisodesTable({ id }: Readonly<EpisodesTableProps>) {
                     <tr key={episode.id} className="group">
                       <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
-                          <Link href={`/podcast/${id}/episode/${episode.id}`}>
+                          <Link href={`/podcast/${id}/episode/${verifyUrl(episode.id)}`}>
                             <p>{episode.title}</p>
                           </Link>
                         </div>
