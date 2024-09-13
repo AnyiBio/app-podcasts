@@ -14,7 +14,7 @@ export default function PodcastCard({ id, image_url, name, author }: PodcastProp
     <div className={styles.card}>
       <Link href={`/podcast/${id}`}>
         <Image
-          src={image_url}
+          src={image_url || ''}
           alt={`${name} cover`}
           width={100}
           height={100}

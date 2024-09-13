@@ -1,7 +1,17 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import PodcastCard from './podcast-card';
 import styles from './podcast.module.css';
 import Search from '../search';
 import { getTopPodcasts } from '@/src/application/get.top-podcasts';
+
+interface Podcast {
+  id: string;
+  podcastImage: string;
+  podcastName: string;
+  author: string;
+}
 
 interface SearchParamsProps {
   searchParams?: {
@@ -9,9 +19,15 @@ interface SearchParamsProps {
   };
 }
 
-export default async function Podcasts({ searchParams }: Readonly<SearchParamsProps>) {
+export default function Podcasts({ searchParams }: Readonly<SearchParamsProps>) {
   const query = searchParams?.query ?? '';
-  const podcasts = await getTopPodcasts();
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
+
+  useEffect(() => {
+    getTopPodcasts().then((result) => {
+      setPodcasts(result);
+    });
+  }, []);
 
   const filteredPodcasts = podcasts.filter(
     (podcast) =>
