@@ -3,14 +3,14 @@ import { CardSkeleton } from './ui/skeletons';
 
 const Podcasts = React.lazy(() => import('./ui/podcasts/podcasts'));
 
-export default function Page({
+export default async function Page({
   searchParams
 }: {
   searchParams?: {
     query?: string;
   };
 }) {
-  const query = searchParams?.query || '';
+  const query = (await searchParams?.query) || '';
   return (
     <main className="">
       <Suspense fallback={<CardSkeleton />}>

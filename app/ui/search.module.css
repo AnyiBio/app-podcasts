@@ -1,0 +1,7 @@
+.search {
+  margin-top: 4rem;
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-shrink: 0;
+}

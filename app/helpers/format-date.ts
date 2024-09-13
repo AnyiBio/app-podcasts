@@ -1,4 +1,7 @@
 export default function formatDate(inputDateString: string): string {
+  if (!inputDateString) {
+    return '';
+  }
   const date = new Date(inputDateString);
 
   const day = date.getUTCDate();

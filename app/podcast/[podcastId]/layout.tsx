@@ -1,10 +1,8 @@
-'use client';
-
 import { Suspense } from 'react';
 import SideNav from '../../ui/podcasts/sidenav';
-import { PodcastDetailProvider } from '@/app/hooks/usePodcastDetail';
+import { getPodcastDetails } from '@/src/application/get.podcast-detail';
 
-export default function Layout({
+export default async function Layout({
   children,
   params
 }: {
@@ -13,16 +11,16 @@ export default function Layout({
     podcastId: string;
   };
 }) {
+  const podcastDetail = await getPodcastDetails(params.podcastId);
+  const id = await params.podcastId;
   return (
-    <PodcastDetailProvider>
-      <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-        <div className="w-full flex-none md:w-64">
-          <Suspense fallback={<div>loading...</div>}>
-            <SideNav id={params.podcastId} />
-          </Suspense>
-        </div>
-        <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden my-10">
+      <div className="w-full flex-none md:w-64">
+        <Suspense fallback={<div>loading...</div>}>
+          <SideNav id={id} podcastDetail={podcastDetail} />
+        </Suspense>
       </div>
-    </PodcastDetailProvider>
+      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+    </div>
   );
 }

@@ -1,49 +1,18 @@
-'use client';
-
-import { usePodcastDetailContext } from '@/app/hooks/usePodcastDetail';
 import { lusitana } from '../fonts';
-import { useEffect, useState } from 'react';
 import { fetchAndParseXml } from '@/app/service/parseXml';
 
 interface EpisodeDetailProps {
-  podcastId: string;
   episodeId: string;
+  podcastDetail: any[];
 }
 
-export function Card({ podcastId, episodeId }: Readonly<EpisodeDetailProps>) {
-  const { podcastDetail, fetchPodcastDetail } = usePodcastDetailContext();
-  const [episodeDetail, setEpisodeDetail] = useState({
-    id: '',
-    description: '',
-    title: '',
-    audio: {
-      $: {
-        length: '',
-        type: '',
-        url: ''
-      }
+export async function Card({ episodeId, podcastDetail }: Readonly<EpisodeDetailProps>) {
+  const xmlUrl = await podcastDetail?.[0].feedUrl;
+  const episodeDetail = await fetchAndParseXml(xmlUrl).then((res) => {
+    if (res?.episodes) {
+      return res.episodesDetail.find((ep: any) => ep.id === episodeId);
     }
   });
-
-  useEffect(() => {
-    if (podcastId) {
-      fetchPodcastDetail(podcastId);
-    }
-  }, [podcastId]);
-
-  useEffect(() => {
-    if (!!podcastDetail) {
-      const xmlUrl = podcastDetail?.[0].feedUrl;
-      console.log(podcastDetail);
-      fetchAndParseXml(xmlUrl).then((res) => {
-        if (res?.episodes) {
-          const foundEpisode = res.episodesDetail.find((ep: any) => ep.id === episodeId);
-          setEpisodeDetail(foundEpisode);
-        }
-      });
-    }
-    console.log(episodeDetail, 'episode detail');
-  }, [podcastDetail]);
 
   return (
     <div className="rounded-xl bg-gray-50 p-2 shadow-sm">

@@ -1,33 +1,16 @@
-'use client';
-
 import Link from 'next/link';
 import styles from './sidenav.module.css';
-import { usePodcastDetailContext } from '@/app/hooks/usePodcastDetail';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { fetchAndParseXml } from '@/app/service/parseXml';
 
 interface SideNavProps {
   id: string;
+  podcastDetail: any[];
 }
 
-export default function SideNav({ id }: Readonly<SideNavProps>) {
-  const { podcastDetail, fetchPodcastDetail } = usePodcastDetailContext();
-  const [descripton, setDescription] = useState('');
-  useEffect(() => {
-    if (id) {
-      fetchPodcastDetail(id);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (!!podcastDetail) {
-      const xmlUrl = podcastDetail?.[0].feedUrl;
-      fetchAndParseXml(xmlUrl).then((res) => {
-        setDescription(res?.description);
-      });
-    }
-  }, [podcastDetail]);
+export default async function SideNav({ id, podcastDetail }: Readonly<SideNavProps>) {
+  const xmlUrl = await podcastDetail?.[0].feedUrl;
+  const description: string = await fetchAndParseXml(xmlUrl).then((res) => res?.description);
   return (
     <div className={styles.container}>
       <Link className={styles.link} href={`/podcast/${id}`}>
@@ -39,11 +22,11 @@ export default function SideNav({ id }: Readonly<SideNavProps>) {
           alt="podcast image"
         />
       </Link>
-      <div className={`${styles.content} md:${styles.contentMd}`}>
-        <p className={styles.title}>{`${podcastDetail?.[0].trackName}`}</p>
-        <span className={styles.author}>{`by ${podcastDetail?.[0].artistName} `}</span>
+      <div className={`${styles.content} md:${styles.contentMd} || ''`}>
+        <p className={styles.title}>{`${podcastDetail?.[0].trackName || ''}`}</p>
+        <span className={styles.author}>{`by ${podcastDetail?.[0].artistName || ''}`}</span>
         <p className={styles.description}>Description</p>
-        <p className={styles.descriptionText}>{descripton}</p>
+        <p className={styles.descriptionText}>{description}</p>
       </div>
     </div>
   );
