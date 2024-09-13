@@ -13,8 +13,9 @@ Welcome to the Top Podcasts Itunes application repository! This application allo
 </div>
 
 ## Documentation and Architecture
-📝 You can find out more about this project here [https://silver-desert-6c9.notion.site/Crypto-currency-exchange-f44e9f5cfbf34d97a978b247bd359c46](https://silver-desert-6c9.notion.site/Crypto-currency-exchange-f44e9f5cfbf34d97a978b247bd359c46)
+The project follows Hexagonal Architecture principles to ensure a clear separation of concerns. The directory structure is designed to keep the core logic isolated from external dependencies, making the application more maintainable and scalable.
 
+```plaintext
 /
 ├── public/                  # Static files accessible publicly
 │   ├── images/              # Static images
@@ -29,7 +30,7 @@ Welcome to the Top Podcasts Itunes application repository! This application allo
 │   │   ├── about.tsx        # About page
 │   │   └── ...              # Other application pages
 │   ├── service/             # Application services, like fetching data from localStorage
-│   │   ├── podcastService.ts# Service for managing podcast data
+│   │   ├── parseXml.ts      # Service for managing podcast data
 │   │   └── ...              # Other related services
 ├── src/                     # Source code of the application, structured according to hexagonal architecture
 │   ├── domain/              # Domain logic
@@ -48,11 +49,12 @@ Welcome to the Top Podcasts Itunes application repository! This application allo
 │   │       └── ...          # Other related services
 │   ├── infrastructure/      # Infrastructure implementations
 │   │   ├── dataSources/     # Data sources and repository implementations
-│   │   │   └── PodcastRepositoryImpl.ts # Implementation of the podcast repository
+│   │   │   └── PodcastRepository.ts # Implementation of the podcast repository
 │   │   └── ...              # Other infrastructure components
-│   └── constants/           # Application constants
-│       ├── appConstants.ts  # Global constants for the application
+│   └── shared/              # Application constants
+│       ├── constants.ts     # Global constants for the application
 │       └── ...              # Other related constants
+```
 
 ### Folder Structure Explained:
 * public/: Contains static files served directly to the browser, such as images and other files that do not require processing.
